@@ -7,7 +7,7 @@ public class ActionController : MonoBehaviour
     private bool isInputEnabled;
 	// Use this for initialization
 	void Start () {
-	
+	    
 	}
 	
 	// Update is called once per frame
@@ -19,7 +19,7 @@ public class ActionController : MonoBehaviour
     {
         if (isInputEnabled)
         {
-            
+            transform.eulerAngles = Input.gyro.rotationRateUnbiased;
         }
     }
 }
