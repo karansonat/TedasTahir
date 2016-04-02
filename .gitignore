@@ -3,6 +3,7 @@
 Library/
 Temp/
 obj/
+_APK/*
 **/*.bin
 **/*.log
 **/*.userprefs
