@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class MiniGame1 : MonoBehaviour, ILevel
+public class Level4 : MonoBehaviour, ILevel
 {
 
     // Use this for initialization
@@ -13,10 +13,10 @@ public class MiniGame1 : MonoBehaviour, ILevel
     // Update is called once per frame
     void Update()
     {
-        CoreLoop();
+        GameLoop();
     }
 
-    public void CoreLoop()
+    public void GameLoop()
     {
         
     }

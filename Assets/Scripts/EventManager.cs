@@ -19,7 +19,7 @@ public class EventManager : MonoBehaviour
 
     public static event GameEndAction OnGameEnd;
 
-    public void GameEnd()
+    public static void GameEnd()
     {
         if (OnGameEnd != null)
         {
