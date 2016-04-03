@@ -27,7 +27,8 @@ public class LevelManager : MonoBehaviour {
     {
         //Start first finished level.;
         SwitchLevel(1);
-        UI.SetActive(false);
+        UI.transform.FindChild("MainMenu").gameObject.SetActive(false);
+        UI.transform.FindChild("InGame").gameObject.SetActive(true);
         Debug.Log("Star Game Clicked");
     }
 
