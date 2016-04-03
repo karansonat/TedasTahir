@@ -17,6 +17,7 @@ public class WorkerLogic : MonoBehaviour
         Debug.Log("WorkerLogic::Start");
         level = GameObject.Find("MiniGame2").GetComponent<Level2>();
         isAlive = true;
+        
     }
 
     public void SetWorker(int index) {
@@ -65,19 +66,18 @@ public class WorkerLogic : MonoBehaviour
         //isAlive = false;
         level.Blocks[blockIndex].GetComponent<BlockController>().hasWorker = false;
         level.numberOfWorkers--;
-        //Play death animation here.
     }
 
     void OnTriggerEnter2D(Collider2D col)
     {
-        Debug.Log("BISEYE DEYDIM");
+
         if (isAlive)
         {
-            Debug.Log("ölüdeğil");
+
 
             if (col.gameObject.tag == "lightning")
             {
-                Debug.Log("DeadAnimTrigger");
+
                 isAlive = false;
                 GetComponent<Animator>().SetTrigger("Dead");
             }
@@ -89,7 +89,7 @@ public class WorkerLogic : MonoBehaviour
     public void DiggingAnimationCallback()
     {
         digTimer += 0.5f;
-        if (digTimer == 3)
+        if (digTimer == 4.5f)
         {
             digTimer = 0;
             Dig();

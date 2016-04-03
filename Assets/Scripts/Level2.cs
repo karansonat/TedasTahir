@@ -9,17 +9,22 @@ public class Level2 : MonoBehaviour, ILevel
     public int levelSocore;
     public int numberOfWorkers;
     private bool spawnFlag;
+    private int spawnLimit;
+    private float spawnDelay;
 
     // Use this for initialization
     void Start()
     {
         //BURAYA OYUNUN BAŞLAYACAĞINI BELİRTEN GERİ SAYIMDAN SONRA FLAGI AKTIF ETMEYİ KOY
+        spawnLimit = 0;
         spawnFlag = true;
         var backgroundObject = transform.FindChild("BlockHolder");
         foreach (Transform child in backgroundObject.transform)
         {
             Blocks.Add(child.gameObject);
         }
+        Blocks.RemoveAt(Blocks.Count - 1);
+
     }
 
     void OnEnable()
@@ -34,7 +39,7 @@ public class Level2 : MonoBehaviour, ILevel
     // Update is called once per frame
     void Update()
     {
-        if (numberOfWorkers<3&&spawnFlag)
+        if (numberOfWorkers<3 && spawnFlag)
         {
 
             StartCoroutine(WaitAndSpawn(1.0f));
