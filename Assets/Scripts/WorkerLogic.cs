@@ -62,9 +62,28 @@ public class WorkerLogic : MonoBehaviour
 
     public void KillWorker()
     {
-        isAlive = false;
+        //isAlive = false;
         level.Blocks[blockIndex].GetComponent<BlockController>().hasWorker = false;
+        level.numberOfWorkers--;
         //Play death animation here.
+    }
+
+    void OnTriggerEnter2D(Collider2D col)
+    {
+        Debug.Log("BISEYE DEYDIM");
+        if (isAlive)
+        {
+            Debug.Log("ölüdeğil");
+
+            if (col.gameObject.tag == "lightning")
+            {
+                Debug.Log("DeadAnimTrigger");
+                isAlive = false;
+                GetComponent<Animator>().SetTrigger("Dead");
+            }
+
+        }
+
     }
 
     public void DiggingAnimationCallback()

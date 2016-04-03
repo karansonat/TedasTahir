@@ -26,4 +26,16 @@ public class EventManager : MonoBehaviour
             OnGameEnd();
         }
     }
+    public delegate void AddScoreAction(int score);
+
+    public static event AddScoreAction OnAddScore;
+
+    public static void AddScore(int score)
+    {
+        if (OnAddScore != null)
+        {
+            OnAddScore(score);
+        }
+    }
+
 }

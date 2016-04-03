@@ -6,10 +6,15 @@ public class Level2 : MonoBehaviour, ILevel
 {
     public GameObject Worker;
     public List<GameObject> Blocks;
+    public int levelSocore;
+    public int numberOfWorkers;
+    private bool spawnFlag;
 
     // Use this for initialization
     void Start()
     {
+        //BURAYA OYUNUN BAŞLAYACAĞINI BELİRTEN GERİ SAYIMDAN SONRA FLAGI AKTIF ETMEYİ KOY
+        spawnFlag = true;
         var backgroundObject = transform.FindChild("BlockHolder");
         foreach (Transform child in backgroundObject.transform)
         {
@@ -17,18 +22,40 @@ public class Level2 : MonoBehaviour, ILevel
         }
     }
 
+    void OnEnable()
+    {
+        EventManager.OnAddScore += Score;
+    }
+    void OnDisable()
+    {
+        EventManager.OnAddScore -= Score;
+    }
+
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.KeypadEnter))
+        if (numberOfWorkers<3&&spawnFlag)
         {
+
+            StartCoroutine(WaitAndSpawn(1.0f));
             SpawnWorker();
+            spawnFlag = false;
         }
+    }
+
+    IEnumerator WaitAndSpawn(float sec) {
+        yield return new WaitForSeconds(sec);
+        spawnFlag = true;
     }
 
     public void GameLoop()
     {
         
+    }
+
+    void Score(int addedScore)
+    {
+        levelSocore += addedScore;
     }
 
     public void SpawnWorker()
@@ -47,6 +74,7 @@ public class Level2 : MonoBehaviour, ILevel
         var block = GetRandomBlock();
         var bc = block.GetComponent<BlockController>();
         var wl = workerInstance.GetComponent<WorkerLogic>();
+        numberOfWorkers++;
 
         wl.blockIndex = block.transform.GetSiblingIndex();
         wl.SetInitialPosition();
@@ -54,6 +82,8 @@ public class Level2 : MonoBehaviour, ILevel
         bc.UpdateVisual(wl.DigMasks[0]);
 
     }
+
+
 
     public GameObject GetRandomBlock()
     {
@@ -63,6 +93,10 @@ public class Level2 : MonoBehaviour, ILevel
             index = Random.Range(0, Blocks.Count);
         }
         return Blocks[index];
+    }
+
+    void AddScore() {
+    
     }
 
     public void StartLevel()

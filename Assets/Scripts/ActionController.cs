@@ -4,8 +4,11 @@ using System;
 
 public class ActionController : MonoBehaviour
 {
-
+    public GameObject ChargeLightning;
+    public GameObject ShootLightning;
     private bool isInputEnabled;
+
+
 	// Use this for initialization
 	void Start () {
         Input.gyro.enabled = true;
@@ -16,7 +19,7 @@ public class ActionController : MonoBehaviour
 	// Update is called once per frame
 	void Update () {
         CharacterMovementController();
-
+        Lightning();
     }
 
     private void CharacterMovementController()
@@ -29,9 +32,33 @@ public class ActionController : MonoBehaviour
     }
 
     private void Lightning() {
-        if (Input.GetMouseButtonDown(0)){
-            //Lightning animasyonunu başlat karakteri durdur.
+        if (isInputEnabled)
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                isInputEnabled = false;
+                GetComponent<Animator>().SetTrigger("SendLightning");
+                ShowCharge();
+            }
         }
     }
+
+
+    void ShowCharge() {
+        ChargeLightning.SetActive(true);
+    }
+    void ShowShoot() {
+        ChargeLightning.SetActive(false);
+        ShootLightning.SetActive(true);
+    }
+
+    void EndOfLightningAction()
+    {
+        ChargeLightning.SetActive(false);
+        ShootLightning.SetActive(false);
+        isInputEnabled = true;
+
+    }
+
 
 }
