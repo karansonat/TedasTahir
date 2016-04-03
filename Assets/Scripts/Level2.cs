@@ -20,8 +20,6 @@ public class Level2 : MonoBehaviour, ILevel
         {
             Blocks.Add(child.gameObject);
         }
-        //Hack(sonat):
-        Blocks.RemoveAt(Blocks.Count-1);
     }
 
     void OnEnable()
