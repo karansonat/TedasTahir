@@ -6,7 +6,8 @@ public class WorkerLogic : MonoBehaviour
 {
     private Level2 level;
     public List<Sprite> DigMasks;
-    public List<float> stateYPos; 
+    public List<float> stateYPos;
+    public AudioSource audio;
     public bool isAlive;
     public int blockIndex;
 
@@ -87,6 +88,7 @@ public class WorkerLogic : MonoBehaviour
 
     public void DiggingAnimationCallback()
     {
+        audio.Play();
         digTimer += 0.5f;
         if (digTimer == 2f)
         {

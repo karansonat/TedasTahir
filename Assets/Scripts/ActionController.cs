@@ -7,12 +7,24 @@ public class ActionController : MonoBehaviour
     public GameObject ChargeLightning;
     public GameObject ShootLightning;
     public GameObject CameraLightningEffect;
+    public AudioSource audioSource;
     private bool isInputEnabled;
     public float x_LeftLimit;
     public float x_RightLimit;
 
-	// Use this for initialization
-	void Start () {
+    private bool firstTime = true;
+
+    void OnEnable()
+    {
+        EventManager.OnWaveEnd += FirstClickControl;
+    }
+
+    void OnDisable()
+    {
+        EventManager.OnWaveEnd -= FirstClickControl;
+    }
+    // Use this for initialization
+    void Start () {
         Input.gyro.enabled = true;
         isInputEnabled = true;
 
@@ -46,11 +58,21 @@ public class ActionController : MonoBehaviour
         {
             if (Input.GetMouseButtonDown(0))
             {
+                if (firstTime)
+                {
+                    firstTime = false;
+                    return;
+                }
                 isInputEnabled = false;
                 GetComponent<Animator>().SetTrigger("SendLightning");
                 ShowCharge();
             }
         }
+    }
+
+    void FirstClickControl(int i)
+    {
+        firstTime = true;
     }
 
 
@@ -61,7 +83,7 @@ public class ActionController : MonoBehaviour
         ChargeLightning.SetActive(false);
         ShootLightning.SetActive(true);
         CameraLightningEffect.SetActive(true);
-
+        audioSource.Play();
     }
 
     void EndOfLightningAction()
@@ -70,7 +92,6 @@ public class ActionController : MonoBehaviour
         ShootLightning.SetActive(false);
         isInputEnabled = true;
         CameraLightningEffect.SetActive(false);
-
     }
 
 

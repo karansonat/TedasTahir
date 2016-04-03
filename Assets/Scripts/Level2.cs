@@ -27,7 +27,7 @@ public class Level2 : MonoBehaviour, ILevel
     {
         isLevelStarted = false;
         isWaveStarted = false;
-        WaveTimeLimit = 10;
+        WaveTimeLimit = 15;
         currentIndex = -1;
         WaveScore = 0;
         //BURAYA OYUNUN BAŞLAYACAĞINI BELİRTEN GERİ SAYIMDAN SONRA FLAGI AKTIF ETMEYİ KOY
