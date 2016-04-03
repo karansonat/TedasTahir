@@ -27,7 +27,7 @@ public class Level2 : MonoBehaviour, ILevel
     {
         isLevelStarted = false;
         isWaveStarted = false;
-        WaveTimeLimit = 5;
+        WaveTimeLimit = 10;
         currentIndex = -1;
         WaveScore = 0;
         //BURAYA OYUNUN BAŞLAYACAĞINI BELİRTEN GERİ SAYIMDAN SONRA FLAGI AKTIF ETMEYİ KOY
@@ -82,6 +82,10 @@ public class Level2 : MonoBehaviour, ILevel
         foreach (GameObject digger in diggers) {
             digger.GetComponent<WorkerLogic>().KillWorker();
             
+        }
+
+        foreach (GameObject block in Blocks) {
+            block.GetComponent<BlockController>().Reset();
         }
         isWaveStarted = false;
 
@@ -167,8 +171,12 @@ public class Level2 : MonoBehaviour, ILevel
         wl.blockIndex = block.transform.GetSiblingIndex();
         wl.SetInitialPosition();
         bc.hasWorker = true;
-        if(bc.blockState==-1)
-            bc.UpdateVisual(wl.DigMasks[0]);
+        if (bc.blockState == -1)
+        {
+            bc.blockState++;
+            bc.UpdateVisual(wl.DigMasks[0]); 
+        }
+            
 
     }
 

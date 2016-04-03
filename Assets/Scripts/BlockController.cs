@@ -17,4 +17,9 @@ public class BlockController : MonoBehaviour
 	{
 	    GetComponent<SpriteRenderer>().sprite = sprite;
 	}
+    public void Reset() {
+        blockState = -1;
+        GetComponent<SpriteRenderer>().sprite = InitialSprite;
+
+    }
 }

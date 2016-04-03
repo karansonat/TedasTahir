@@ -39,9 +39,9 @@ public class WorkerLogic : MonoBehaviour
             return;
         }
         //Delete this after implement end game session.
-        if (bc.blockState >= DigMasks.Count)
+        if (bc.blockState >= DigMasks.Count-1)
         {
-            Debug.LogError("1)End Game ekranini implement etmen gerek. 2)Level2 kapanmali. 3)en asagi kadar inmeden oyun bitiyor cunku gorsel yok.");
+            EventManager.WaveEnd(-1);
             return;
         }
         //End
@@ -88,7 +88,7 @@ public class WorkerLogic : MonoBehaviour
     public void DiggingAnimationCallback()
     {
         digTimer += 0.5f;
-        if (digTimer == 4.5f)
+        if (digTimer == 2f)
         {
             digTimer = 0;
             Dig();
