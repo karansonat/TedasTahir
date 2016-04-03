@@ -1,11 +1,15 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class WorkerLogic : MonoBehaviour
 {
-    public GameObject DigMask;
+    public List<Sprite> DigMasks;
+    List<GameObject> blocks;
     public bool isAlive;
     private static Vector3 digStep;
+    public int blockIndex;
+    public int blockState;
 
     // Use this for initialization
     void Start()
@@ -13,7 +17,10 @@ public class WorkerLogic : MonoBehaviour
         digStep = new Vector3(0.0f,-0.05f,0.0f);
         isAlive = true;
     }
-
+    public void SetWorker(int index,int blockState) {
+        blockIndex = index;
+        this.blockState = blockState;
+    }
 
 	
 	// Update is called once per frame
@@ -24,7 +31,8 @@ public class WorkerLogic : MonoBehaviour
     public void Dig()
     {
         if (!isAlive) return;
-        transform.position += digStep;
+        blockState++;
+        blocks[blockIndex].GetComponent<SpriteRenderer>().sprite = DigMasks[blockState];
     }
 
     public void KillWorker()
