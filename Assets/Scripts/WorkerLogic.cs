@@ -25,10 +25,7 @@ public class WorkerLogic : MonoBehaviour
     }
 
 	void Update () {
-	    if (Input.GetMouseButtonDown(0))
-	    {
-	        Dig();
-	    }
+
 	}
 
     public void Dig()
@@ -64,8 +61,10 @@ public class WorkerLogic : MonoBehaviour
     public void KillWorker()
     {
         //isAlive = false;
+  
         level.Blocks[blockIndex].GetComponent<BlockController>().hasWorker = false;
         level.numberOfWorkers--;
+        gameObject.SetActive(false);
     }
 
     void OnTriggerEnter2D(Collider2D col)

@@ -6,6 +6,8 @@ public class UIManager : MonoBehaviour {
 
     public Text ingameScore;
     public Text EndGameScore;
+    public Text WaveScoreText;
+    public int WaveScore;
     public int LevelScore;
     public int GeneralScore;
 
@@ -17,10 +19,12 @@ public class UIManager : MonoBehaviour {
     void OnEnable()
     {
         EventManager.OnAddScore += Score;
+        EventManager.OnWaveEnd += ShowWaveEnd;
     }
     void OnDisable()
     {
         EventManager.OnAddScore -= Score;
+        EventManager.OnWaveEnd -= ShowWaveEnd;
     }
 
     void Score(int addedScore)
@@ -30,9 +34,17 @@ public class UIManager : MonoBehaviour {
         UpdateScoreTexts();
     }
 
+    void ShowWaveEnd(int waveScore)
+    {
+        WaveScore = waveScore;
+        Score(waveScore);
+       // WaveScoreText.text = ""+waveScore;
+       // UpdateScoreTexts();
+    }
+
     void UpdateScoreTexts() {
-        ingameScore.text = "" + LevelScore;
-        EndGameScore.text = "" + GeneralScore;
+ //       ingameScore.text = "" + LevelScore;
+  //     EndGameScore.text = "" + GeneralScore;
     }
 
 }

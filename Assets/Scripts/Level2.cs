@@ -1,20 +1,35 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 public class Level2 : MonoBehaviour, ILevel
 {
     public GameObject Worker;
     public List<GameObject> Blocks;
+    public List<WaveData> TotalWaves = new List<WaveData>();
     public int levelSocore;
+    public bool isLevelStarted;
     public int numberOfWorkers;
     private bool spawnFlag;
-    private int spawnLimit;
+    private float spawnLimit;
     private float spawnDelay;
+    private int currentIndex;
+    private float WaveTimeLimit;
+    private float WaveStartTime;
+    private bool isWaveStarted;
+    private int WaveScore;
+
+    public Text CountDown;
 
     // Use this for initialization
     void Start()
     {
+        isLevelStarted = false;
+        isWaveStarted = false;
+        WaveTimeLimit = 5;
+        currentIndex = -1;
+        WaveScore = 0;
         //BURAYA OYUNUN BAŞLAYACAĞINI BELİRTEN GERİ SAYIMDAN SONRA FLAGI AKTIF ETMEYİ KOY
         spawnLimit = 0;
         spawnFlag = true;
@@ -24,32 +39,100 @@ public class Level2 : MonoBehaviour, ILevel
             Blocks.Add(child.gameObject);
         }
         Blocks.RemoveAt(Blocks.Count - 1);
+        Blocks.RemoveAt(Blocks.Count - 1); 
 
     }
+
+    void SetUpWave() {
+        spawnDelay = TotalWaves[currentIndex].SpawnDelay;
+        spawnLimit = TotalWaves[currentIndex].SpawnLimit;
+    }
+
+    void WaveController() {
+        
+    }
+ 
 
     void OnEnable()
     {
         EventManager.OnAddScore += Score;
+        EventManager.OnWaveStart += WaveStart;
+        EventManager.OnWaveEnd += WaveEnd;
+
+
     }
     void OnDisable()
     {
         EventManager.OnAddScore -= Score;
+        EventManager.OnWaveStart -= WaveStart;
+        EventManager.OnWaveEnd -= WaveEnd;
     }
 
+    void WaveStart() {
+        currentIndex++;
+        SetUpWave();
+        isWaveStarted = true;
+        WaveStartTime = Time.realtimeSinceStartup;
+    }
+
+    void WaveEnd(int score)
+    {
+        Debug.Log("WaveEnd");
+        GameObject[] diggers = GameObject.FindGameObjectsWithTag("Digger");
+        foreach (GameObject digger in diggers) {
+            digger.GetComponent<WorkerLogic>().KillWorker();
+            
+        }
+        isWaveStarted = false;
+
+
+    }
     // Update is called once per frame
     void Update()
     {
-        if (numberOfWorkers<3 && spawnFlag)
+        if (isLevelStarted && isWaveStarted )
         {
+            float countdown = WaveTimeLimit- Mathf.Floor(Time.realtimeSinceStartup - WaveStartTime  );
+            CountDown.text = "" + countdown;
+            if (numberOfWorkers < spawnLimit && spawnFlag)
+            {
+                StartCoroutine(WaitAndSpawn());
+                SpawnWorker();
+                spawnFlag = false;
+            }
+            Debug.Log(Time.realtimeSinceStartup+ "   " + WaveStartTime);
+            if (Time.realtimeSinceStartup - WaveStartTime > WaveTimeLimit)
+            {
 
-            StartCoroutine(WaitAndSpawn(1.0f));
-            SpawnWorker();
-            spawnFlag = false;
+                EventManager.WaveEnd(WaveScore);
+                return;
+            }
+
         }
+        if (Input.GetMouseButtonDown(0))
+        {
+            if (!isLevelStarted)
+            {
+                isWaveStarted = true;
+                isLevelStarted = true;
+                EventManager.WaveStart();
+                // EventManager.WaveStart();
+            }
+           else if (!isWaveStarted)
+            {
+                isWaveStarted = true;
+                EventManager.WaveStart();
+                // EventManager.WaveStart();
+            }
+
+        }
+
     }
 
-    IEnumerator WaitAndSpawn(float sec) {
-        yield return new WaitForSeconds(sec);
+
+
+    IEnumerator WaitAndSpawn() {
+        yield return new WaitForSeconds(spawnDelay);
         spawnFlag = true;
     }
 
@@ -84,7 +167,8 @@ public class Level2 : MonoBehaviour, ILevel
         wl.blockIndex = block.transform.GetSiblingIndex();
         wl.SetInitialPosition();
         bc.hasWorker = true;
-        bc.UpdateVisual(wl.DigMasks[0]);
+        if(bc.blockState==-1)
+            bc.UpdateVisual(wl.DigMasks[0]);
 
     }
 

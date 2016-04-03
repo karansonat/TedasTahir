@@ -38,4 +38,28 @@ public class EventManager : MonoBehaviour
         }
     }
 
+    public delegate void WaveEndAction(int score);
+
+    public static event WaveEndAction OnWaveEnd;
+
+    public static void WaveEnd(int score)
+    {
+        if (OnAddScore != null)
+        {
+            OnWaveEnd(score);
+        }
+    }
+
+    public delegate void WaveStartAction();
+
+    public static event WaveStartAction OnWaveStart;
+
+    public static void WaveStart()
+    {
+        if (OnWaveStart != null)
+        {
+            OnWaveStart();
+        }
+    }
+
 }
