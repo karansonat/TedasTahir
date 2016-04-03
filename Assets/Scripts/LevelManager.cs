@@ -25,10 +25,10 @@ public class LevelManager : MonoBehaviour {
 
     public void StartGame()
     {
-        //Start first random level.
-        var index = Random.Range(0, 4);
-        SwitchLevel(index);
+        //Start first finished level.;
+        SwitchLevel(1);
         UI.SetActive(false);
+        Debug.Log("Star Game Clicked");
     }
 
     public void EndGame()
