@@ -4,21 +4,26 @@ using System.Collections.Generic;
 
 public class Level2 : MonoBehaviour, ILevel
 {
-    List<int> blocksWithWorker;
     public GameObject Worker;
     public List<GameObject> Blocks;
+
     // Use this for initialization
     void Start()
     {
-        for (var i = 0; i < Blocks.Count; i++) {
-            blocksWithWorker.Add(0);
+        var backgroundObject = transform.FindChild("BlockHolder");
+        foreach (Transform child in backgroundObject.transform)
+        {
+            Blocks.Add(child.gameObject);
         }
     }
 
     // Update is called once per frame
     void Update()
     {
-        GameLoop();
+        if (Input.GetKeyDown(KeyCode.KeypadEnter))
+        {
+            SpawnWorker();
+        }
     }
 
     public void GameLoop()
@@ -26,9 +31,38 @@ public class Level2 : MonoBehaviour, ILevel
         
     }
 
-    public void SpawnWorker(int blockIndex) {
-        GameObject WorkerInstance = GameObject.Instantiate(Worker);
+    public void SpawnWorker()
+    {
+        var isSpawnAvailable = false;
+        foreach (var obj in Blocks)
+        {
+            if (!obj.GetComponent<BlockController>().hasWorker)
+            {
+                isSpawnAvailable = true;
+                break;
+            }   
+        }
+        if (!isSpawnAvailable) return;
+        var workerInstance = Instantiate(Worker);
+        var block = GetRandomBlock();
+        var bc = block.GetComponent<BlockController>();
+        var wl = workerInstance.GetComponent<WorkerLogic>();
 
+        wl.blockIndex = block.transform.GetSiblingIndex();
+        wl.SetInitialPosition();
+        bc.hasWorker = true;
+        bc.UpdateVisual(wl.DigMasks[0]);
+
+    }
+
+    public GameObject GetRandomBlock()
+    {
+        var index = Random.Range(0, Blocks.Count);
+        while (Blocks[index].GetComponent<BlockController>().hasWorker)
+        {
+            index = Random.Range(0, Blocks.Count);
+        }
+        return Blocks[index];
     }
 
     public void StartLevel()
@@ -38,7 +72,7 @@ public class Level2 : MonoBehaviour, ILevel
 
     public void EndLevel()
     {
-        throw new System.NotImplementedException();
+        Debug.Log("Level2 - GameEnd");
     }
 
     public void ToogleInput(bool flag)
